@@ -6,7 +6,6 @@ pipeline {
         stage('Install Dependencies') {
             steps {
                 bat '''
-                pip install --upgrade pip
                 pip install -r requirements.txt
                 '''
             }
@@ -38,6 +37,14 @@ pipeline {
                         ${scannerHome}\\bin\\sonar-scanner.bat
                         """
                     }
+                }
+            }
+        }
+
+        stage('Quality Gate') {
+            steps {
+                timeout(time: 2, unit: 'MINUTES') {
+                    waitForQualityGate abortPipeline: true
                 }
             }
         }
