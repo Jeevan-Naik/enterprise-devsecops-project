@@ -43,13 +43,22 @@ pipeline {
 
         stage('Quality Gate') {
             steps {
-        echo 'Quality Gate Passed'
+                echo 'Quality Gate Passed'
             }
         }
 
         stage('Docker Verification') {
             steps {
                 bat 'docker version'
+            }
+        }
+
+        stage('Docker Build') {
+            steps {
+                bat """
+                docker build -t enterprise-devsecops-app:%BUILD_NUMBER% .
+                docker tag enterprise-devsecops-app:%BUILD_NUMBER% enterprise-devsecops-app:latest
+                """
             }
         }
     }
