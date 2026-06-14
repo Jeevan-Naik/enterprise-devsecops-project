@@ -80,6 +80,12 @@ pipeline {
                 '''
             }
         }
+            
+        stage('Manual Approval') {
+            steps {
+                input message: 'UAT validation successful. Deploy to Production?'
+            }
+        }
     }
     post {
         always {
