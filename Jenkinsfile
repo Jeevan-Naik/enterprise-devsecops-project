@@ -80,6 +80,27 @@ pipeline {
                 '''
             }
         }
+
+        stage('Send Approval Email') {
+                steps {
+                    emailext(
+                        subject: "UAT Deployment Ready For Approval - Build #${BUILD_NUMBER}",
+                        body: """
+        Application successfully deployed to UAT.
+
+        Build Number: ${BUILD_NUMBER}
+
+        UAT URL:
+        http://localhost:5001
+
+        Approval is required before Production deployment.
+        Jenkins Build:
+        ${BUILD_URL}
+        """,
+                 to: 'enterprise.devsecops@outlook.com'
+                )
+            }
+        }
             
         stage('Manual Approval') {
             steps {
