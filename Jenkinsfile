@@ -61,6 +61,14 @@ pipeline {
                 """
             }
         }
+
+        stage('Deploy UAT') {
+            steps {
+                bat """
+                docker run -d --name enterprise-app-uat -p 5001:5000 enterprise-devsecops-app:%BUILD_NUMBER%
+                """
+            }
+        }
     }
 
     post {
