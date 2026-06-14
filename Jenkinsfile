@@ -140,17 +140,56 @@ pipeline {
             }
         }
     }
-    post {
-        always {
-            echo 'Pipeline execution completed'
-        }
+    
+        post {
 
-        success {
-            echo 'Pipeline succeeded'
-        }
+            always {
+                echo 'Pipeline execution completed'
+            }
 
-        failure {
-            echo 'Pipeline failed'
-        }
+            success {
+                echo 'Pipeline succeeded'
+
+            mail(
+                to: 'enterprise.devsecops@outlook.com',
+                subject: "PRODUCTION Deployment Successful - Build #${BUILD_NUMBER}",
+                body: """
+                Production deployment completed successfully.
+
+                Build Number: ${BUILD_NUMBER}
+
+                UAT URL:
+                http://localhost:5001
+
+                PROD URL:
+                http://localhost:5002
+
+                Docker Image:
+                enterprise-devsecops-app:${BUILD_NUMBER}
+
+                Jenkins Build:
+                ${BUILD_URL}
+                """
+            )
     }
+
+    failure {
+        echo 'Pipeline failed'
+
+        mail(
+            to: 'enterprise.devsecops@outlook.com',
+            subject: "PIPELINE FAILED - Build #${BUILD_NUMBER}",
+            body: """
+            Pipeline execution failed.
+
+            Build Number: ${BUILD_NUMBER}
+
+            Please review the Jenkins console logs.
+
+            Jenkins Build:
+            ${BUILD_URL}
+            """
+        )
+    }
+}
 }
