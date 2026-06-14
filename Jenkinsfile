@@ -106,6 +106,18 @@ pipeline {
                 '''
             }
         }
+
+        stage('Release Summary') {
+            steps {
+                echo "======================================"
+                echo "Release Successfully Deployed"
+                echo "Build Number: ${env.BUILD_NUMBER}"
+                echo "UAT URL: http://localhost:5001"
+                echo "PROD URL: http://localhost:5002"
+                echo "Image: enterprise-devsecops-app:${env.BUILD_NUMBER}"
+                echo "======================================"
+            }
+        }
     }
     post {
         always {
