@@ -69,8 +69,15 @@ pipeline {
                 """
             }
         }
+    
+        stage('Smoke Test UAT') {
+            steps {
+                bat '''
+                curl http://localhost:5001/health
+                '''
+            }
+        }
     }
-
     post {
         always {
             echo 'Pipeline execution completed'
