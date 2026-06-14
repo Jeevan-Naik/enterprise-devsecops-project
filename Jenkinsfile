@@ -83,7 +83,7 @@ pipeline {
 
         stage('Send Approval Email') {
                 steps {
-                    emailext(
+                    mail(
                         subject: "UAT Deployment Ready For Approval - Build #${BUILD_NUMBER}",
                         body: """
         Application successfully deployed to UAT.
