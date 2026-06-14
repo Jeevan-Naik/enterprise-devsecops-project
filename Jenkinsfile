@@ -64,9 +64,11 @@ pipeline {
 
         stage('Deploy UAT') {
             steps {
-                bat """
+                bat '''
+                docker stop enterprise-app-uat 2>NUL
+                docker rm enterprise-app-uat 2>NUL
                 docker run -d --name enterprise-app-uat -p 5001:5000 enterprise-devsecops-app:%BUILD_NUMBER%
-                """
+                '''
             }
         }
     
