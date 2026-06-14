@@ -75,6 +75,7 @@ pipeline {
         stage('Smoke Test UAT') {
             steps {
                 bat '''
+                timeout /t 10 /nobreak
                 curl http://localhost:5001/health
                 '''
             }
