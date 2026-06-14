@@ -86,6 +86,26 @@ pipeline {
                 input message: 'UAT validation successful. Deploy to Production?'
             }
         }
+
+        stage('Deploy PROD') {
+            steps {
+                bat '''
+                docker stop enterprise-app-prod 2>NUL
+                docker rm enterprise-app-prod 2>NUL
+                docker run -d --name enterprise-app-prod -p 5002:5000 enterprise-devsecops-app:%BUILD_NUMBER%
+                '''
+            }
+        }
+
+        stage('Validate PROD') {
+            steps {
+                sleep(time: 15, unit: 'SECONDS')
+
+                bat '''
+                curl http://localhost:5002/health
+                '''
+            }
+        }
     }
     post {
         always {
